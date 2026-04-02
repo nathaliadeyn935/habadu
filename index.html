@@ -6,7 +6,7 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
     <title>hahahahahaha</title>
 
@@ -22,13 +22,17 @@
 
             --rose-color: #f5f5f5;
 
-            --rose-glow: rgba(255, 255, 255, 0.5);
+            --rose-glow: rgba(255, 255, 255, 0.6);
 
             --gold: #fcf6ba;
 
             --stem-color: #0c3d23;
 
+            --stem-glow: rgba(12, 61, 35, 0.5);
+
             --milky-way: radial-gradient(ellipse at center, rgba(50, 100, 200, 0.15) 0%, transparent 70%);
+
+            --rain-glow: rgba(255, 255, 255, 0.4);
 
         }
 
@@ -52,17 +56,63 @@
 
             cursor: pointer;
 
+            touch-action: manipulation;
+
         }
 
 
 
-        /* --- SKY & MOON --- */
+        /* --- INSTRUCTIONS TEXT (TOP RIGHT) --- */
+
+        .tap-instruction {
+
+            position: absolute;
+
+            top: 20px;
+
+            right: 20px;
+
+            color: rgba(255, 255, 255, 0.6);
+
+            font-family: sans-serif;
+
+            font-size: 0.7rem;
+
+            letter-spacing: 2px;
+
+            z-index: 100;
+
+            pointer-events: none;
+
+            opacity: 0;
+
+            transition: opacity 1s ease-in-out;
+
+        }
+
+
+
+        .show-text { opacity: 1; }
+
+
+
+        /* --- SKY & STARS --- */
 
         .sky { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
 
-        .star { position: absolute; background: white; border-radius: 50%; animation: twinkle var(--d) infinite alternate; }
+        
 
-        @keyframes twinkle { from { opacity: 0.2; } to { opacity: 1; } }
+        .star { 
+
+            position: absolute; background: white; border-radius: 50%; 
+
+            animation: twinkle var(--d) infinite alternate;
+
+            box-shadow: 0 0 8px 1px rgba(255, 255, 255, 0.8);
+
+        }
+
+        @keyframes twinkle { from { opacity: 0.3; transform: scale(0.8); } to { opacity: 1; transform: scale(1.2); } }
 
 
 
@@ -70,7 +120,7 @@
 
             position: absolute; top: 8%; left: 50%; transform: translateX(-50%);
 
-            width: 70px; height: 70px; background: #fff; border-radius: 50%;
+            width: 60px; height: 60px; background: #fff; border-radius: 50%;
 
             box-shadow: 0 0 40px 10px rgba(255,255,255,0.3); z-index: 1;
 
@@ -78,39 +128,29 @@
 
 
 
-        .moonlight-beam {
+        /* SHOOTING STARS */
 
-            position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+        .rain {
 
-            width: 300px; height: 100%;
+            position: absolute; 
 
-            background: radial-gradient(ellipse at top, rgba(255,255,255,0.08) 0%, transparent 70%);
+            background: linear-gradient(to bottom, transparent, var(--rain-glow));
 
-            opacity: 0; transition: 1.5s; z-index: 2; pointer-events: none;
+            width: 1.5px; height: 150px;
 
-        }
+            top: -200px;
 
-        .alive .moonlight-beam { opacity: 1; }
+            box-shadow: 0 0 5px var(--rain-glow);
 
-
-
-        .shooting-star {
-
-            position: absolute; background: linear-gradient(90deg, #fff, transparent);
-
-            transform: rotate(-45deg); opacity: 0; z-index: 1;
+            animation: fall var(--d) linear infinite;
 
         }
 
-        @keyframes shoot {
+        @keyframes fall {
 
-            0% { transform: translateX(0) translateY(0) rotate(-45deg); opacity: 0; }
+            0% { transform: translateY(0) translateX(100px) rotate(35deg); }
 
-            10% { opacity: 1; }
-
-            25% { transform: translateX(-400px) translateY(400px) rotate(-45deg); opacity: 0; }
-
-            100% { opacity: 0; }
+            100% { transform: translateY(120vh) translateX(-400px) rotate(35deg); }
 
         }
 
@@ -124,7 +164,7 @@
 
             display: flex; flex-direction: column; align-items: center;
 
-            margin-bottom: -2px; 
+            margin-bottom: 20px; 
 
             pointer-events: auto;
 
@@ -132,17 +172,33 @@
 
 
 
+        .rose-head {
+
+            position: absolute; top: -100px; left: 50%;
+
+            transform: translateX(-50%) rotate(5deg);
+
+            width: 100px; height: 100px;
+
+            z-index: 10; transition: 1.5s ease-in-out;
+
+        }
+
+
+
         .stem {
 
-            width: 16px; height: 45vh;
+            width: 14px; height: 40vh;
 
             background: linear-gradient(to right, #051a0f, #0c3d23, #051a0f);
 
             border-radius: 12px;
 
-            transform: rotate(-2deg);
+            transform-origin: bottom center;
 
             position: relative; z-index: 5; transition: 1s;
+
+            box-shadow: 0 0 15px 3px var(--stem-glow);
 
         }
 
@@ -150,45 +206,57 @@
 
         .leaf {
 
-            position: absolute; width: 60px; height: 30px;
+            position: absolute; width: 50px; height: 25px;
 
             background: var(--stem-color); border-radius: 50% 0 50% 0;
+
+            border: 1px solid rgba(0,0,0,0.3);
 
             filter: brightness(0.8); transition: 1.5s;
 
         }
 
-        .l1 { top: 70px; left: 15px; transform: rotate(15deg); }
+        .l1 { top: 60px; left: 12px; transform: rotate(20deg); }
 
-        .l2 { top: 190px; left: -50px; transform: scaleX(-1) rotate(15deg); }
+        .l2 { top: 160px; left: -45px; transform: scaleX(-1) rotate(15deg); }
 
 
 
-        /* --- IMPROVED RIBBON --- */
+        .thorn {
+
+            position: absolute; width: 0; height: 0;
+
+            border-left: 5px solid transparent; border-right: 5px solid transparent;
+
+            border-bottom: 10px solid #000;
+
+        }
+
+        .t1 { top: 30px; left: -6px; transform: rotate(-105deg); }
+
+        .t2 { top: 90px; right: -6px; transform: rotate(105deg); }
+
+
 
         .ribbon-wrap {
 
-            position: absolute; top: 45%; left: 50%;
+            position: absolute; top: 65%;
 
-            transform: translate(-50%, -50%);
+            left: 50%; transform: translate(-50%, -50%);
 
-            width: 120px; height: 80px; z-index: 20;
+            width: 110px; height: 70px; z-index: 20;
 
             pointer-events: none;
 
         }
 
-        /* Ang part nga nag-wrap sa stem */
-
         .ribbon-main {
 
-            position: absolute; width: 100%; height: 22px;
+            position: absolute; width: 100%; height: 20px;
 
-            background: #1a1a1a; 
+            background: #1a1a1a; border-bottom: 2px solid #000;
 
-            border-bottom: 2px solid #000;
-
-            transform: rotate(-10deg);
+            transform: rotate(-8deg);
 
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
 
@@ -196,43 +264,17 @@
 
         }
 
-        /* Ang nagbitay nga tumoy */
-
-        .ribbon-tail {
-
-            position: absolute; right: 15px; top: 10px;
-
-            width: 20px; height: 70px;
-
-            background: #111;
-
-            clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 85%, 0 100%);
-
-            transform: rotate(8deg);
-
-            box-shadow: -2px 5px 10px rgba(0,0,0,0.5);
-
-        }
-
         .ribbon-label {
 
             font-family: 'Great Vibes', cursive; color: var(--gold);
 
-            font-size: 1.1rem; text-shadow: 0 0 5px rgba(0,0,0,0.8);
+            font-size: 1rem; text-shadow: 0 0 5px rgba(0,0,0,0.8);
 
             white-space: nowrap;
 
         }
 
 
-
-        .rose-head {
-
-            position: relative; width: 115px; height: 115px;
-
-            margin-bottom: -15px; z-index: 10; transition: 1.5s ease-in-out;
-
-        }
 
         .petal {
 
@@ -241,6 +283,8 @@
             background: linear-gradient(to top, #111, #444, var(--rose-color));
 
             border-radius: 50% 50% 20% 20% / 80% 80% 20% 20%;
+
+            border: 1px solid rgba(255, 255, 255, 0.4);
 
             transform-origin: bottom center; transition: 1.5s cubic-bezier(0.4, 0, 0.2, 1);
 
@@ -258,9 +302,9 @@
 
 
 
-        .alive .rose-head { transform: scale(1.3); filter: drop-shadow(0 0 30px var(--rose-glow)); }
+        .alive .rose-head { transform: translateX(-50%) scale(1.25); filter: drop-shadow(0 0 30px var(--rose-glow)); }
 
-        .alive .petal { transform: translateX(-50%) rotateX(-50deg) translateZ(35px); }
+        .alive .petal { transform: translateX(-50%) rotateX(-50deg) translateZ(35px); border-color: rgba(255,255,255,0.7); }
 
         .alive .p2 { transform: translateX(-50%) rotateY(72deg) rotateX(-50deg) translateZ(35px); }
 
@@ -272,13 +316,11 @@
 
         
 
-        .withered .rose-head { transform: scale(0.85) rotate(10deg); filter: brightness(0.2) grayscale(1); }
+        .withered .rose-head { transform: translateX(-50%) scale(0.8); filter: brightness(0.2) grayscale(1); }
 
         .withered .stem, .withered .leaf { filter: brightness(0.3); }
 
 
-
-        /* --- MINI ROSES (TANOM SA UBOS) --- */
 
         .mini-rose {
 
@@ -286,13 +328,13 @@
 
             display: flex; flex-direction: column; align-items: center;
 
-            transform-origin: bottom;
+            transform-origin: bottom; pointer-events: none;
 
             animation: growAndBloom var(--d) forwards ease-out;
 
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.4));
+
         }
-
-
 
         @keyframes growAndBloom {
 
@@ -306,13 +348,11 @@
 
         }
 
-
-
         .mini-bud { 
 
-            position: relative; width: 30px; height: 35px; 
+            position: relative; width: 25px; height: 30px; 
 
-            transition: 1s; transform: scale(0);
+            transform: scale(0);
 
             animation: bloomPetals var(--d) forwards;
 
@@ -328,33 +368,23 @@
 
         }
 
-
-
         .m-petal {
 
             position: absolute; bottom: 0; width: 100%; height: 100%;
 
-            background: linear-gradient(to top, #444, #fff);
+            background: linear-gradient(to top, #666, #fff);
 
-            border-radius: 50% 50% 20% 20%; box-shadow: 0 0 10px rgba(255,255,255,0.5);
+            border-radius: 50% 50% 20% 20%;
+
+            border: 0.5px solid rgba(255,255,255,0.8);
 
             transform-origin: bottom center;
 
         }
 
-        .mp1 { transform: rotateX(-20deg); }
-
-        .mp2 { transform: rotateY(120deg) rotateX(-20deg); }
-
-        .mp3 { transform: rotateY(240deg) rotateX(-20deg); }
-
-
-
         .mini-stem { 
 
-            width: 4px; 
-
-            height: var(--h); /* Random Height */
+            width: 3px; height: var(--h);
 
             background: linear-gradient(to top, #051a0f, var(--stem-color)); 
 
@@ -374,7 +404,7 @@
 
     <div class="moon"></div>
 
-    <div class="moonlight-beam"></div>
+    <div class="tap-instruction" id="tapText">tap eniwer :> ></div>
 
 
 
@@ -394,6 +424,8 @@
 
             <div class="leaf l1"></div><div class="leaf l2"></div>
 
+            <div class="thorn t1"></div><div class="thorn t2"></div>
+
             <div class="ribbon-wrap">
 
                 <div class="ribbon-main">
@@ -401,8 +433,6 @@
                     <span class="ribbon-label">happy birthday, Raze!</span>
 
                 </div>
-
-                <div class="ribbon-tail"></div>
 
             </div>
 
@@ -416,29 +446,55 @@
 
         const body = document.getElementById('theBody');
 
-        const bigRoseArea = document.getElementById('bigRoseArea');
-
         const sky = document.getElementById('sky');
 
+        const bigRose = document.getElementById('bigRoseArea');
+
+        const tapText = document.getElementById('tapText');
 
 
-        // Stars Generation
 
-        for (let i = 0; i < 130; i++) {
+        // Logic for "TAP ANYWHERE >" appearance
+
+        function manageTapText() {
+
+            tapText.classList.add('show-text');
+
+            setTimeout(() => {
+
+                tapText.classList.remove('show-text');
+
+            }, 5000); // Appear for 5 seconds
+
+        }
+
+
+
+        // Run every 15 minutes (15 * 60 * 1000 ms)
+
+        setInterval(manageTapText, 900000);
+
+        // Run immediately on load
+
+        manageTapText();
+
+
+
+        for (let i = 0; i < 80; i++) {
 
             const star = document.createElement('div');
 
             star.className = 'star';
 
-            const size = Math.random() * 2 + 'px';
+            const size = (Math.random() * 2 + 1) + 'px';
 
             star.style.width = size; star.style.height = size;
 
-            star.style.top = Math.random() * 80 + '%';
+            star.style.top = Math.random() * 70 + '%';
 
             star.style.left = Math.random() * 100 + '%';
 
-            star.style.setProperty('--d', (Math.random() * 3 + 1) + 's');
+            star.style.setProperty('--d', (Math.random() * 2 + 1) + 's');
 
             sky.appendChild(star);
 
@@ -446,57 +502,45 @@
 
 
 
-        // Shooting Stars
+        for (let i = 0; i < 40; i++) {
 
-        setInterval(() => {
+            const drop = document.createElement('div');
 
-            if(Math.random() > 0.4) {
+            drop.className = 'rain';
 
-                const s = document.createElement('div');
+            drop.style.left = (Math.random() * 150) - 30 + '%'; 
 
-                s.className = 'shooting-star';
+            drop.style.animationDelay = Math.random() * 2 + 's';
 
-                s.style.width = Math.random() > 0.6 ? '160px' : '70px';
+            drop.style.setProperty('--d', (Math.random() * 0.8 + 1.2) + 's'); 
 
-                s.style.height = '1px';
+            sky.appendChild(drop);
 
-                s.style.top = Math.random() * 40 + '%';
-
-                s.style.left = (Math.random() * 50 + 50) + '%';
-
-                s.style.animation = `shoot ${Math.random()*1.5 + 1}s linear forwards`;
-
-                sky.appendChild(s);
-
-                setTimeout(() => s.remove(), 2500);
-
-            }
-
-        }, 5000);
+        }
 
 
 
-        let mainTimer;
+        let bloomTimer;
 
 
 
-        bigRoseArea.addEventListener('click', (e) => {
+        bigRose.addEventListener('click', (e) => {
 
             e.stopPropagation();
 
-            clearTimeout(mainTimer);
+            clearTimeout(bloomTimer);
 
             body.classList.remove('withered');
 
             body.classList.add('alive');
 
-            mainTimer = setTimeout(() => {
+            bloomTimer = setTimeout(() => {
 
                 body.classList.remove('alive');
 
                 body.classList.add('withered');
 
-            }, 12000);
+            }, 10000);
 
         });
 
@@ -504,11 +548,7 @@
 
         body.addEventListener('click', (e) => {
 
-            if (e.target.id === 'theBody' || e.target.id === 'sky') {
-
-                spawnMiniRose(e.clientX);
-
-            }
+            spawnMiniRose(e.clientX);
 
         });
 
@@ -520,17 +560,11 @@
 
             mini.className = 'mini-rose';
 
-            
+            const randomHeight = Math.floor(Math.random() * 100) + 50;
 
-            // Random Height: base 40px up to half of the screen height
+            const scale = (Math.random() * 0.5 + 0.4).toFixed(2);
 
-            const randomHeight = Math.floor(Math.random() * (window.innerHeight / 2.5)) + 40;
-
-            const scale = (Math.random() * 0.5 + 0.5).toFixed(2);
-
-            const duration = (Math.random() * 2 + 4).toFixed(1) + 's';
-
-            
+            const duration = (Math.random() * 1.5 + 2.0).toFixed(1) + 's';
 
             mini.style.left = x + 'px';
 
@@ -540,17 +574,15 @@
 
             mini.style.setProperty('--d', duration);
 
-            
-
             mini.innerHTML = `
 
                 <div class="mini-bud">
 
-                    <div class="m-petal mp1"></div>
+                    <div class="m-petal" style="transform: rotateX(-20deg)"></div>
 
-                    <div class="m-petal mp2"></div>
+                    <div class="m-petal" style="transform: rotateY(120deg) rotateX(-20deg)"></div>
 
-                    <div class="m-petal mp3"></div>
+                    <div class="m-petal" style="transform: rotateY(240deg) rotateX(-20deg)"></div>
 
                 </div>
 
@@ -566,21 +598,19 @@
 
 
 
-        // Auto-bloom on start
-
         window.onload = () => {
 
             body.classList.remove('withered');
 
             body.classList.add('alive');
 
-            mainTimer = setTimeout(() => {
+            bloomTimer = setTimeout(() => {
 
                 body.classList.add('withered');
 
                 body.classList.remove('alive');
 
-            }, 8000);
+            }, 6000);
 
         };
 
