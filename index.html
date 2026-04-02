@@ -108,7 +108,7 @@
 
             animation: twinkle var(--d) infinite alternate;
 
-            box-shadow: 0 0 8px 1px rgba(255, 255, 255, 0.8);
+            will-change: transform, opacity;
 
         }
 
@@ -128,7 +128,7 @@
 
 
 
-        /* SHOOTING STARS */
+        /* RAIN SHOWER EFFECT */
 
         .rain {
 
@@ -136,13 +136,13 @@
 
             background: linear-gradient(to bottom, transparent, var(--rain-glow));
 
-            width: 1.5px; height: 150px;
+            width: 1px; height: 250px; /* Mas taas ug pino para sa shower effect */
 
-            top: -200px;
-
-            box-shadow: 0 0 5px var(--rain-glow);
+            top: -300px;
 
             animation: fall var(--d) linear infinite;
+
+            will-change: transform;
 
         }
 
@@ -150,7 +150,7 @@
 
             0% { transform: translateY(0) translateX(100px) rotate(35deg); }
 
-            100% { transform: translateY(120vh) translateX(-400px) rotate(35deg); }
+            100% { transform: translateY(130vh) translateX(-400px) rotate(35deg); }
 
         }
 
@@ -332,8 +332,6 @@
 
             animation: growAndBloom var(--d) forwards ease-out;
 
-            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.4));
-
         }
 
         @keyframes growAndBloom {
@@ -404,7 +402,7 @@
 
     <div class="moon"></div>
 
-    <div class="tap-instruction" id="tapText">tap eniwer :> ></div>
+    <div class="tap-instruction" id="tapText">tap eniwer :></div>
 
 
 
@@ -454,8 +452,6 @@
 
 
 
-        // Logic for "TAP ANYWHERE >" appearance
-
         function manageTapText() {
 
             tapText.classList.add('show-text');
@@ -464,23 +460,21 @@
 
                 tapText.classList.remove('show-text');
 
-            }, 5000); // Appear for 5 seconds
+            }, 5000);
 
         }
 
 
 
-        // Run every 15 minutes (15 * 60 * 1000 ms)
-
         setInterval(manageTapText, 900000);
-
-        // Run immediately on load
 
         manageTapText();
 
 
 
-        for (let i = 0; i < 80; i++) {
+        // Optimized Stars (60 stars)
+
+        for (let i = 0; i < 60; i++) {
 
             const star = document.createElement('div');
 
@@ -502,7 +496,9 @@
 
 
 
-        for (let i = 0; i < 40; i++) {
+        // Optimized Rain Shower (20 drops, faster speed)
+
+        for (let i = 0; i < 20; i++) {
 
             const drop = document.createElement('div');
 
@@ -512,7 +508,9 @@
 
             drop.style.animationDelay = Math.random() * 2 + 's';
 
-            drop.style.setProperty('--d', (Math.random() * 0.8 + 1.2) + 's'); 
+            // Faster fall duration for shower effect
+
+            drop.style.setProperty('--d', (Math.random() * 0.4 + 0.6) + 's'); 
 
             sky.appendChild(drop);
 
@@ -560,11 +558,11 @@
 
             mini.className = 'mini-rose';
 
-            const randomHeight = Math.floor(Math.random() * 100) + 50;
+            const randomHeight = Math.floor(Math.random() * 80) + 40;
 
-            const scale = (Math.random() * 0.5 + 0.4).toFixed(2);
+            const scale = (Math.random() * 0.4 + 0.4).toFixed(2);
 
-            const duration = (Math.random() * 1.5 + 2.0).toFixed(1) + 's';
+            const duration = (Math.random() * 1.0 + 1.5).toFixed(1) + 's';
 
             mini.style.left = x + 'px';
 
