@@ -62,8 +62,6 @@
 
 
 
-        /* --- INSTRUCTIONS TEXT (TOP RIGHT) --- */
-
         .tap-instruction {
 
             position: absolute;
@@ -96,8 +94,6 @@
 
 
 
-        /* --- SKY & STARS --- */
-
         .sky { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
 
         
@@ -108,7 +104,7 @@
 
             animation: twinkle var(--d) infinite alternate;
 
-            will-change: transform, opacity;
+            box-shadow: 0 0 8px 1px rgba(255, 255, 255, 0.8); /* GIBALIK ANG GLOW */
 
         }
 
@@ -122,13 +118,13 @@
 
             width: 60px; height: 60px; background: #fff; border-radius: 50%;
 
-            box-shadow: 0 0 40px 10px rgba(255,255,255,0.3); z-index: 1;
+            box-shadow: 0 0 50px 15px rgba(255,255,255,0.4); /* GIBALIK ANG GLOW */
+
+            z-index: 1;
 
         }
 
 
-
-        /* RAIN SHOWER EFFECT */
 
         .rain {
 
@@ -136,13 +132,11 @@
 
             background: linear-gradient(to bottom, transparent, var(--rain-glow));
 
-            width: 1px; height: 250px; /* Mas taas ug pino para sa shower effect */
-
             top: -300px;
 
-            animation: fall var(--d) linear infinite;
+            box-shadow: 0 0 5px var(--rain-glow); /* GIBALIK ANG GLOW */
 
-            will-change: transform;
+            animation: fall var(--d) linear infinite;
 
         }
 
@@ -156,15 +150,13 @@
 
 
 
-        /* --- MAIN ROSE --- */
-
         .rose-system {
 
             position: relative; z-index: 10;
 
             display: flex; flex-direction: column; align-items: center;
 
-            margin-bottom: 20px; 
+            margin-bottom: -5px; /* GI-PAUBOS PARA "GATANOM" SA SCREEN */
 
             pointer-events: auto;
 
@@ -188,11 +180,11 @@
 
         .stem {
 
-            width: 14px; height: 40vh;
+            width: 14px; height: 42vh; /* GI-ADJUST ANG GIDAK-ON */
 
             background: linear-gradient(to right, #051a0f, #0c3d23, #051a0f);
 
-            border-radius: 12px;
+            border-radius: 12px 12px 0 0;
 
             transform-origin: bottom center;
 
@@ -331,6 +323,8 @@
             transform-origin: bottom; pointer-events: none;
 
             animation: growAndBloom var(--d) forwards ease-out;
+
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.4)); /* GIBALIK ANG GLOW */
 
         }
 
@@ -472,9 +466,9 @@
 
 
 
-        // Optimized Stars (60 stars)
+        // Stars (70 stars)
 
-        for (let i = 0; i < 60; i++) {
+        for (let i = 0; i < 70; i++) {
 
             const star = document.createElement('div');
 
@@ -496,21 +490,29 @@
 
 
 
-        // Optimized Rain Shower (20 drops, faster speed)
+        // Random Shooting Stars (15 drops, random sizes, 2ms slower logic)
 
-        for (let i = 0; i < 20; i++) {
+        for (let i = 0; i < 15; i++) {
 
             const drop = document.createElement('div');
 
             drop.className = 'rain';
 
+            const rWidth = (Math.random() * 1.5 + 0.5) + 'px'; // Random size
+
+            const rHeight = (Math.random() * 150 + 100) + 'px'; // Random size
+
+            drop.style.width = rWidth;
+
+            drop.style.height = rHeight;
+
             drop.style.left = (Math.random() * 150) - 30 + '%'; 
 
             drop.style.animationDelay = Math.random() * 2 + 's';
 
-            // Faster fall duration for shower effect
+            // Adjusted speed (original 0.6s -> + 0.002s slower as requested)
 
-            drop.style.setProperty('--d', (Math.random() * 0.4 + 0.6) + 's'); 
+            drop.style.setProperty('--d', (Math.random() * 0.4 + 0.602) + 's'); 
 
             sky.appendChild(drop);
 
@@ -558,7 +560,13 @@
 
             mini.className = 'mini-rose';
 
-            const randomHeight = Math.floor(Math.random() * 80) + 40;
+            
+
+            // RANDOM SIZES: Tupong sa big flower (approx 250px) ug half ana (125px)
+
+            const randomHeight = Math.floor(Math.random() * 125) + 125; 
+
+            
 
             const scale = (Math.random() * 0.4 + 0.4).toFixed(2);
 
